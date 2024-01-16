@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+crossorigin=""></script>
+
+<style>
+    #mapi {height: 500px;width: 500px;}
+</style>
+
+<body>
+    <div id="mapi"></div>
+    <script>
+        var map = L.map('mapi').setView([34.655803905058974, -77.05673217773439], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+    var daMarker = L.marker([34.655803905058974, -77.05673217773439]).addTo(map);
+    daMarker.bindPopup("<b>Emerald Isle</b><br>Emerald Isle is a town on Bogue Banks Island, part of North Carolina’s Crystal Coast. The Bogue Inlet Pier is a popular fishing spot, with views of the Atlantic Ocean. The Western and Eastern Ocean Regional Accesses are public entry points to the beach, a water sports hub. Emerald Isle Woods Park has a disc golf course and a dock, plus shoreline and forest trails, including part of the North Carolina Birding Trail.").openPopup();
+
+    </script>
+    
+</body>
+</html>
