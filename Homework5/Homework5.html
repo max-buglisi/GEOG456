@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoJSON Viewer</title>
+</head>
+<body>
+    <h1>GeoJSON to Array</h1>
+    <h2>In the console there should be a variable "CountryName" that is an array of the country names from the data set.</h2>
+    <script src="./data.js"></script>
+
+    <button id="generateButton">Generate Console Log</button>
+
+    <script>
+    var generateButton = document.getElementById('generateButton');
+
+    generateButton.addEventListener('click', function() {
+
+
+        var CountryNames = []
+        data.features.forEach(function(featureArray) {
+            featureArray.forEach(function(feature) {
+                var CountryName = feature["Country (Name)"];
+                CountryNames.push(CountryName);
+
+            });
+
+        });
+
+        console.log(CountryNames);
+    });
+    </script>
+
+    
+
+</body>
+</html>
