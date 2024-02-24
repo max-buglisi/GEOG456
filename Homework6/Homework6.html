@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+} 
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+  <table id="myTable">
+    <thead>
+      <tr>
+        <th>Header 1</th>
+        <th>Header 2</th>
+        <!-- Add more headers as needed -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data rows will be populated here -->
+    </tbody>
+  </table>
+  <script src="./data.js"></script>
+  <script>
+
+    var table = document.getElementById("myTable");
+
+
+    var objectsArray = []
+        data.features.forEach(function(featureArray) {
+            featureArray.forEach(function(feature) {
+                var CountryName = feature["Country (Name)"];
+                objectsArray.push(CountryName);
+
+            });
+
+        });
+
+        var rows = table.rows; // Get all rows in the table
+      function addColumn(value){
+        var rows = table.rows; // Get all rows in the table
+        for (var i = 0; i < rows.length; i++) {
+            var cell = rows[i].insertCell(); // Insert a new cell to each row
+            cell.textContent = value; // You can populate this cell with whatever data you want
+        }
+    }
+
+    // addColumn();
+
+
+        objectsArray.forEach(e => addColumn(e))   // iterate through the array and create a column for each element in the array
+
+
+</script>
+</body>
+</html>
+
