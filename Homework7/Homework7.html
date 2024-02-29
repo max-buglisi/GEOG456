@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet with Slider</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+    <!-- Include MainReef.js -->
+    <script src="./data/MainReef.js"></script>
+
+    <style> 
+        #map { width: 100%; height: 500px; }
+    </style>
+
+    <script>
+        function moveSlider(value) {
+            }
+    </script>
+</head> 
+    
+<body>
+    <h3>Max'sHomework 7: Changes in reef structure through time</h3>
+    <br>
+    <input id="myRange" type="range" name="season" value="0" min="0" max="8" oninput="moveSlider(this.value)"> 
+    <br>Data is from personal project tracing historical reef structure in Barbados using satellite data
+    <div>Date: <span id="dateDisplay">1950</span></div>
+    <br><div id="map"></div>
+
+
+    <script>
+        // Initialize Leaflet map
+        var map = L.map('map').setView([13.2660438191925, -59.645638307894799], 17);
+            
+        // Add OpenStreetMap base layer
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Add GeoJSON layer
+        var geojson = L.geoJSON(geojsonData.features[0]).addTo(map);
+
+      var myDates = [1950, 1991, 2013, 2016, 2018, 2020, 2021, 2022, 2023] 
+
+        function moveSlider(value) {
+            map.removeLayer(geojson);
+            document.getElementById("dateDisplay").textContent = myDates[value];
+            geojson = L.geoJSON(geojsonData.features[value]).addTo(map)
+        }
+        moveSlider(0)
+
+ </script>
+ </body>
+ </html>
