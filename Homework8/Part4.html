@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Selector</title>
+    <style>
+        img {
+            width: 400px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        #image-container {
+            text-align: center; /* Center text horizontally */
+        }
+        #image-text {
+            margin-top: 10px; /* Optional: Add some margin to separate image and text */
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+
+<script>
+    function changeImage(imageSrc, text) {
+        // Change the image source
+        document.getElementById('selected-image').src = imageSrc;
+        // Change the text
+        document.getElementById('image-text').innerText = text;
+    }
+</script>
+
+<body>
+    <h3>The point at Emerald Isle, NC</h3>
+    <div id="image-container">
+        <img id="selected-image" src="2012EI.png">
+        <p id="image-text">2012</p>
+    </div>
+    <div class="button-container">
+        <button onclick='changeImage("2012EI.png", "2012")'>2012</button>
+        <button onclick='changeImage("2016EI.png", "2016")'>2016</button>
+        <button onclick='changeImage("2020EI.png", "2020")'>2020</button>
+    </div>
+
+</body>
+</html>
