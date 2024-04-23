@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dots Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+    <script src="./data/Areas.js"></script>
+
+    <style> 
+        body {
+                background-color: #333;
+                color : #fff
+            }
+            #map { width: 50%; height: 400px; margin: auto; }
+            .button-container { margin-bottom: 10px; display: flex; flex-direction: column; align-items: flex-start; position: relative; }
+            .button { padding: 20px 70px; margin-bottom: 0px; cursor: pointer; 
+                      border: 2px solid #000000; border-radius: 0px; font-family: sans-serif;}
+            .button.highlighted {
+                border: 2px solid red; /* Adjust border style as desired */
+            }
+            .button.white-button {
+                background-color: #fff;
+                color: #000;
+                width: calc(50% - 20px); /* Set the width to half of the container width minus some padding */
+                text-align: center;
+                margin: 5px 10px; /* Add some margin for spacing */
+            }
+            .button-container p {
+                position: absolute;
+                top: calc(100% + 10px); /* Position the paragraph below the buttons */
+                right: 0;
+                width: 100%;
+                word-wrap: break-word;
+                text-align: center; /* Center the paragraph text */
+            }
+            .container { position: relative; }
+            h1 { text-align: center; font-family: sans-serif; }
+            p { text-align: center; font-family: sans-serif; }
+            #yearLabel { display: none; }
+        </style>
+</head> 
+    
+<body>
+    <h1>Coral Reefs in Barbados Through Time</h1>
+    <p>GEOG 491 Final Project by Max Buglisi</p>
+    <div class="container">
+        <div class="button-container" style="position: absolute; top: 0; left: 0;">
+            <button class="button" id="btn2013" style="background-color: #034e7b;">2013</button>
+            <button class="button" id="btn2016" style="background-color: #0570b0;">2016</button>
+            <button class="button" id="btn2018" style="background-color: #3690c0;">2018</button>
+            <button class="button" id="btn2020" style="background-color: #74a9cf;">2020</button>
+            <button class="button" id="btn2021" style="background-color: #a6bddb;">2021</button>
+            <button class="button" id="btn2022" style="background-color: #d0d1e6;">2022</button>
+            <button class="button" id="btn2023" style="background-color: #f1eef6;">2023</button>
+        </div>
+        <div class="button-container" style="position: absolute; top: 0; right: 0;">
+            <a href="./BarbadosInfo.html" class="button white-button">Project Info</a>
+            <a href="./SixMensMap.html" class="button white-button">Six Mens Map</a>
+            <a href="./FittsMap.html" class="button white-button">Fitts Village Map</a>
+            <p>Click the links above to learn more about the project / data collection and to explore two specifc reef sites with some different structural change patterns!</p>
+        </div>
+        <div id="map"></div>
+        <div id="yearLabel" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">2013</div>
+        
+    </div>
+    <script>
+        // Initialize Leaflet map
+        var map = L.map('map').setView([13.1960438191925, -59.635638307894799], 11);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png').addTo(map);
+
+        // Define colors for each year
+        var colorbrewerValues = ['#feedde','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#8c2d04'];
+
+        // Function to update the map based on the selected year
+        function updateMap(year) {
+            // Clear existing circles
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Circle) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            // Find the maximum value for the selected year
+            var maxYearValue = geojsonData.reduce(function(max, area) {
+                return Math.max(max, area[year] || 0);
+            }, 0);
+
+            // Add circles for the designated year only
+            geojsonData.forEach(function(area) {
+                var coordinates = area.coordinates;
+                var value = area[year];
+                if (value !== null && !isNaN(value)) {
+                    // Calculate the radius proportionally based on the relative size of each reef compared to the maximum value of the selected year
+                    var radius = ((value / maxYearValue) * 2000)^4;
+
+                    // Create circle with popup
+                    var circle = L.circle(coordinates, {
+                        color: '#000000', // Circle color
+                        fillColor: document.getElementById("btn" + year).style.backgroundColor, // Fill color based on year
+                        fillOpacity: 0.5, // Fill opacity
+                        radius: radius // Circle radius
+                    }).addTo(map);
+
+                    // Add popup with reef name and area value
+                    circle.bindPopup("<b>" + area.name + "</b><br>Year: " + year + "<br>Area: " + value.toFixed(2) + " m²");
+
+                }
+            });
+
+            // Update year label
+            document.getElementById("yearLabel").innerText = year;
+        }
+
+        // Initial map update
+        updateMap(2013);
+
+        // Event listeners for button clicks
+        var buttons = document.querySelectorAll('.button');
+        buttons.forEach(function(button) {
+            button.addEventListener('mouseover', function() {
+                var year = parseInt(this.textContent);
+                updateMap(year);
+
+                // Remove 'active' class from all buttons
+                buttons.forEach(function(btn) {
+                    btn.classList.remove('active');
+                });
+
+                // Add 'active' class to the clicked button
+                this.classList.add('active');
+
+                // Highlight the button for the selected group
+                buttons.forEach(function(btn) {
+                    btn.classList.remove('highlighted');
+                });
+                this.classList.add('highlighted');
+            });
+        });
+    </script>
+</body>
+</html>
